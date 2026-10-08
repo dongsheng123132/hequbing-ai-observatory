@@ -19,7 +19,7 @@ const esc = (s) =>
  *   entityCount:number, engines:string[], regions:string[], isSynthetic:boolean,
  *   leaders:string[]}>} p.boards
  */
-export function renderSiteIndex({ siteName, brand, tagline, boards, generatedAt, methodologyVersion, cadence }) {
+export function renderSiteIndex({ siteName, brand, tagline, boards, generatedAt, methodologyVersion, cadence, basePath }) {
   const anySynthetic = boards.some((b) => b.isSynthetic);
   const cards = boards
     .map(
@@ -38,6 +38,7 @@ export function renderSiteIndex({ siteName, brand, tagline, boards, generatedAt,
 <html lang="zh-CN">
 <head>
 <meta charset="utf-8">
+${basePath ? `<base href="${esc(basePath)}">` : ''}
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>${esc(siteName)} — ${esc(tagline)}</title>
 <meta name="description" content="贺去病行业 AI 品牌认知调查：菲律宾专线物流、电源线工厂的同题观察、公开方法与企业 GEO 自查。">

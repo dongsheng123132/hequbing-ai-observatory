@@ -86,7 +86,8 @@ export function autoFindSamples(root, id) {
  * @param {string} [p.outDir] 覆盖配置里的输出目录
  * @param {string} [p.only] 只构建某个榜单 id（调试用）
  */
-export function buildSite({ configPath, outDir, only }) {
+export function buildSite({ configPath, outDir, only, basePath }) {
+  if (basePath !== undefined && !/^\/(?:[a-zA-Z0-9-]+\/)*$/.test(basePath)) throw new Error('站点挂载路径须以 / 开始和结束');
   const configAbs = resolve(configPath);
   // 约定：site.config.json 放在 site/ 下，项目根是它的上一级
   const root = resolve(dirname(configAbs), '..');
@@ -181,6 +182,7 @@ export function buildSite({ configPath, outDir, only }) {
   boards.sort((a, b) => (b.sampleCount ?? -1) - (a.sampleCount ?? -1));
 
   const index = renderSiteIndex({
+    basePath,
     siteName: config.siteName,
     brand: config.brand,
     tagline: config.tagline,

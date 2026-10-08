@@ -127,7 +127,7 @@ test('采样中首期不读取历史样本、不排种子企业，网页和 JSON
     assert.ok(!candidateHtml.includes('javascript:'));
     config.boards[0].status = 'planned';
     writeFileSync(configPath, JSON.stringify(config));
-    buildSite({configPath,outDir:'planned'});
+    buildSite({configPath,outDir:'planned',basePath:'/observe/rankings/'});
     const planned = JSON.parse(readFileSync(join(root,'planned',index.datasets[0].url),'utf8'));
     assert.equal(planned.status,'planned');
     assert.equal(planned.sampleCount,null);
@@ -137,6 +137,8 @@ test('采样中首期不读取历史样本、不排种子企业，网页和 JSON
     assert.match(plannedPage,/待采样，尚未发布名次/);
     assert.doesNotMatch(plannedPage,/首期采样中/);
     assert.match(readFileSync(join(root,'planned','index.html'),'utf8'),/待采样，尚未发布名次/);
+    assert.match(readFileSync(join(root,'planned','index.html'),'utf8'),/<base href="\/observe\/rankings\/">/);
+    assert.throws(()=>buildSite({configPath,outDir:'invalid-base',basePath:'https://example.com/'}),/挂载路径/);
     assert.equal(JSON.parse(readFileSync(join(root,'planned','data','index.json'),'utf8')).datasets[0].status,'planned');
     cohort.issue='2026-09';
     writeFileSync(join(root,'cohort.json'),JSON.stringify(cohort));
